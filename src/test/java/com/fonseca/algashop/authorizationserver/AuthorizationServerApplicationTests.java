@@ -1,4 +1,4 @@
-package com.fonseca.algashop.authorization_server;
+package com.fonseca.algashop.authorizationserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

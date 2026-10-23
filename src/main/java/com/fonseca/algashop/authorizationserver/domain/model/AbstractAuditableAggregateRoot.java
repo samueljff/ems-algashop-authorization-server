@@ -1,4 +1,4 @@
-package com.fonseca.algashop.authorization_server.domain.model;
+package com.fonseca.algashop.authorizationserver.domain.model;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

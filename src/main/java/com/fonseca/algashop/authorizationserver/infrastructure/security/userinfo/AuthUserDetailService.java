@@ -1,7 +1,7 @@
-package com.fonseca.algashop.authorization_server.infrastructure.security;
+package com.fonseca.algashop.authorizationserver.infrastructure.security.userinfo;
 
-import com.fonseca.algashop.authorization_server.domain.model.AuthUser;
-import com.fonseca.algashop.authorization_server.domain.model.AuthUserRepository;
+import com.fonseca.algashop.authorizationserver.domain.model.AuthUser;
+import com.fonseca.algashop.authorizationserver.domain.model.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
