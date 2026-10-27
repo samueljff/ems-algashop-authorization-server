@@ -48,3 +48,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+## Postmam
+.postman/

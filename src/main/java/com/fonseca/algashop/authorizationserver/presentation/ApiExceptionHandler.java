@@ -72,7 +72,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthUserNotFoundException.class)
     public ProblemDetail handleAuthUserNotFoundException(AuthUserNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-        problemDetail.setTitle("Not found");
+        problemDetail.setTitle("Not Found");
         problemDetail.setDetail(e.getMessage());
         problemDetail.setType(URI.create("/errors/not-found"));
         return problemDetail;

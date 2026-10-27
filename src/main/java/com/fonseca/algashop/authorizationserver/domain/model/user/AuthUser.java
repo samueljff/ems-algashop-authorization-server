@@ -4,10 +4,7 @@ import com.fonseca.algashop.authorizationserver.domain.model.AbstractAuditableAg
 import com.fonseca.algashop.authorizationserver.domain.model.DomainException;
 import com.fonseca.algashop.authorizationserver.domain.model.IdGenerator;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -18,6 +15,8 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class AuthUser extends AbstractAuditableAggregateRoot<AuthUser> {
 
     @Id
@@ -46,6 +45,12 @@ public class AuthUser extends AbstractAuditableAggregateRoot<AuthUser> {
         user.setEnabled(true);
 
         return user;
+    }
+
+    public void anonymize() {
+        this.setName("Anonymized User");
+        this.setEmail("anonymized-" + this.id + "@deleted.local");
+        this.setEnabled(false);
     }
 
     public void setPassword(String password) {
