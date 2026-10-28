@@ -1,6 +1,6 @@
 package com.fonseca.algashop.authorizationserver.application;
 
-import com.fonseca.algashop.authorizationserver.config.TestSecurityConfig;
+import com.fonseca.algashop.authorizationserver.config.TestAuthorizationServerConfig;
 import com.fonseca.algashop.authorizationserver.config.TestcontainerPostgreSQLConfig;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Import({TestcontainerPostgreSQLConfig.class, TestSecurityConfig.class,})
+@Import({TestcontainerPostgreSQLConfig.class, TestAuthorizationServerConfig.class,})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class AbstractApplicationIT {
