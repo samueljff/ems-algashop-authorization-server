@@ -26,6 +26,10 @@ public abstract class UserBase {
     private static final UUID validUserId = UUID.fromString("019d7764-3b02-7be2-9112-039fda30e965");
     private static final UUID invalidUserId = UUID.fromString("00000111-2200-0033-2200-444000000022");
 
+    private static final UUID JOHN_ID  = UUID.fromString("01234567-89ab-cdef-0123-456789abcdef");
+    private static final UUID PETER_ID = UUID.fromString("11234567-89ab-cdef-0123-456789abcdef");
+
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -57,14 +61,20 @@ public abstract class UserBase {
     }
 
     private PageModel<AuthUserOutput> createUsersPage(AuthUserFilter filter) {
+        List<AuthUserOutput> all = List.of(
+            AuthUserOutputTestDataBuilder.aUser().id(JOHN_ID).build(),
+            AuthUserOutputTestDataBuilder.aUserAlt().id(PETER_ID).build()
+        );
+
+        int from = Math.min(filter.getPage() * filter.getSize(), all.size());
+        int to = Math.min(from + filter.getSize(), all.size());
+
         return PageModel.<AuthUserOutput>builder()
-            .number(0)
+            .number(filter.getPage())
             .size(filter.getSize())
-            .totalElements(2)
-            .content(List.of(
-                AuthUserOutputTestDataBuilder.aUser().build(),
-                AuthUserOutputTestDataBuilder.aUserAlt().build()
-            ))
+            .totalElements(all.size())
+            .totalPages((int) Math.ceil((double) all.size() / filter.getSize()))
+            .content(all.subList(from, to))
             .build();
     }
 

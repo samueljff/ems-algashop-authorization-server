@@ -2,10 +2,6 @@ HELP.md
 
 # Gradle
 .gradle/
-caches/
-daemon/
-native/
-wrapper/
 build/
 
 # Gradle Wrapper (mantém apenas os arquivos importantes)
@@ -48,6 +44,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-## Postmam
-.postman/

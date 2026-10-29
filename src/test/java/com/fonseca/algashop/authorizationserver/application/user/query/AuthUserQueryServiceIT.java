@@ -84,22 +84,42 @@ class AuthUserQueryServiceIT extends AbstractApplicationIT {
     }
 
     @Test
-    void shouldFilterUsersByType() {
-        AuthUser manager = AuthUserTestDataBuilder.aUser().build();
-        AuthUser operator = AuthUserTestDataBuilder.aUserAlt().build();
+    void shouldPaginateUsersFilteredByType() {
+        AuthUser manager1 = AuthUserTestDataBuilder.aUser()
+            .name("Alice Manager").email("alice@email.com").build();
+        AuthUser manager2 = AuthUserTestDataBuilder.aUser()
+            .name("Bruno Manager").email("bruno@email.com").build();
+        AuthUser manager3 = AuthUserTestDataBuilder.aUser()
+            .name("Carla Manager").email("carla@email.com").build();
+        AuthUser operator = AuthUserTestDataBuilder.aUserAlt()
+            .name("Aaron Operator").build();
 
-        authUserRepository.saveAllAndFlush(List.of(manager, operator));
+        authUserRepository.saveAllAndFlush(List.of(manager1, manager2, manager3, operator));
 
         AuthUserFilter filter = new AuthUserFilter();
-        filter.setType(manager.getType());
+        filter.setType(AuthUserType.MANAGER);
+        filter.setSize(2);
 
-        PageModel<AuthUserOutput> filtered = authUserQueryService.findAll(filter);
+        filter.setPage(0);
+        PageModel<AuthUserOutput> firstPage = authUserQueryService.findAll(filter);
 
-        assertThat(filtered.getContent())
-            .isNotEmpty()
-            .allSatisfy(user -> assertThat(user.getType()).isEqualTo(AuthUserType.MANAGER))
+        filter.setPage(1);
+        PageModel<AuthUserOutput> secondPage = authUserQueryService.findAll(filter);
+
+        assertThat(firstPage.getContent())
             .extracting(AuthUserOutput::getId)
-            .contains(manager.getId())
-            .doesNotContain(operator.getId());
+            .containsExactly(manager1.getId(), manager2.getId());
+        assertThat(firstPage.getNumber()).isEqualTo(0);
+        assertThat(firstPage.getSize()).isEqualTo(2);
+        assertThat(firstPage.getTotalElements()).isEqualTo(3);
+        assertThat(firstPage.getTotalPages()).isEqualTo(2);
+
+        assertThat(secondPage.getContent())
+            .extracting(AuthUserOutput::getId)
+            .containsExactly(manager3.getId());
+        assertThat(secondPage.getNumber()).isEqualTo(1);
+        assertThat(secondPage.getSize()).isEqualTo(2);
+        assertThat(secondPage.getTotalElements()).isEqualTo(3);
+        assertThat(secondPage.getTotalPages()).isEqualTo(2);
     }
 }
