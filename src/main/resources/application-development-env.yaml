@@ -49,7 +49,6 @@ spring:
             token:
               access-token-time-to-live: 15m
               access-token-format: self-contained # JWT
-
           algashop-ordering-service-client:
             registration:
               client-id: algashop-ordering-service
@@ -63,7 +62,6 @@ spring:
             token:
               access-token-time-to-live: 15m
               access-token-format: self-contained # JWT
-
           algashop-ecommerce-web-client:
             registration:
               client-id: algashop-ecommerce-web
@@ -96,7 +94,6 @@ spring:
               authorization-code-time-to-live: 10m
               refresh-token-time-to-live: 1h
               reuse-refresh-tokens: false
-
           algashop-ecommerce-m2m-client:
             registration:
               client-id: algashop-ecommerce-m2m
@@ -111,6 +108,42 @@ spring:
                 - customers:write
             token:
               access-token-time-to-live: 15m
+          algashop-admin-web-client:
+            registration:
+              client-id: algashop-admin-web
+              client-name: AlgaShop Admin
+              authorization-grant-types:
+                - authorization_code
+              client-authentication-methods:
+                - none # Client público sem autenticação
+              redirect-uris:
+                - http://algashop-admin:4200
+                - http://algashop-admin:4200/silent-refresh.html
+              post-logout-redirect-uris:
+                - http://algashop-admin:4200
+              scopes:
+                - products:read
+                - products:write
+                - products:stock:write
+                - categories:read
+                - categories:write
+                - invoices:read
+                - orders:read
+                - customers:read
+                - shopping-carts:read
+                - users:read
+                - users:write
+                - openid
+            require-authorization-consent: true
+            require-proof-key: true #PKCE
+            token:
+              access-token-time-to-live: 5m
+              authorization-code-time-to-live: 2m
+algashop:
+  security:
+    cors:
+      allowedOrigins:
+        - http://algashop-admim:4200
 
 logging:
   level:
