@@ -50,14 +50,27 @@ public class AuthUserManagementApplicationService {
 	}
 
 	public AuthUserOutput update(UUID userId, AuthUserUpdateInput input) {
-		AuthUser user = authUserRepository.findById(userId)
+		AuthUser authUser = authUserRepository.findById(userId)
 			.orElseThrow(() -> new AuthUserNotFoundException(userId));
 
-		user.setName(input.getName());
-		user.setType(input.getType());
-		user.setEnabled(input.isEnabled());
+		verifyCanEditUser(authUser, input);
 
-		return AuthUserOutput.from(authUserRepository.save(user));
+		authUser.setName(input.getName());
+		authUser.setType(input.getType());
+		authUser.setEnabled(input.isEnabled());
+
+		return AuthUserOutput.from(authUserRepository.save(authUser));
+	}
+
+	private void verifyCanEditUser(AuthUser authUser, AuthUserUpdateInput input) {
+
+		if (!securityCheck.canEditUser(authUser.getType(), authUser.getId())) {
+			throw new AccessDeniedException("Cannot edit user of type " + authUser.getType());
+		}
+
+		if (!securityCheck.canChangeUserType(authUser.getType(), input.getType())) {
+			throw new AccessDeniedException("Cannot change user type to " + input.getType());
+		}
 	}
 
 	public void delete(UUID userId) {
