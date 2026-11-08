@@ -24,6 +24,9 @@ public class AlgashopSecurityProperties {
     @Valid
     private CorsProperties cors;
 
+    @NotBlank
+    private String defaultRedirectUri;
+
     @NotNull
     @Valid
     private CookieProperties cookie;
