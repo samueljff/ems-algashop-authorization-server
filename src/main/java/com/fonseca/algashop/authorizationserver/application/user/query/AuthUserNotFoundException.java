@@ -3,6 +3,11 @@ package com.fonseca.algashop.authorizationserver.application.user.query;
 import java.util.UUID;
 
 public class AuthUserNotFoundException extends RuntimeException{
+
+	public AuthUserNotFoundException(String message) {
+		super(message);
+	}
+
 	public AuthUserNotFoundException(UUID userId) {
 		super("User not found with ID: " + userId);
 	}
