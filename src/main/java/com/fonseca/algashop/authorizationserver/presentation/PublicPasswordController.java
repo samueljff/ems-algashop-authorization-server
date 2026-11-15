@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/change-password")
+@RequestMapping
 @RequiredArgsConstructor
 public class PublicPasswordController {
 
 	private final PasswordManagementApplicationService passwordManagementService;
 
-	@GetMapping
+	@GetMapping("/change-password")
 	public String passwordForm(
             @RequestParam(name = "token", required = false)
             String token,
@@ -33,7 +33,7 @@ public class PublicPasswordController {
 		return "password-form";
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@PostMapping(path = "/change-password", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String changePassword(@RequestParam("token") String token,
 	                              @RequestParam("newPassword") String newPassword,
 	                              Model model) {
@@ -47,5 +47,16 @@ public class PublicPasswordController {
 		}
 
 		return "password-message";
+	}
+
+	@GetMapping("/forgot-password")
+	public String forgotPassword() {
+		return "forgot-password";
+	}
+
+	@PostMapping("/forgot-password")
+	public String forgotPasswordProcessing(@RequestParam("email") String email) {
+		passwordManagementService.requestPasswordChange(email);
+		return "forgot-password-message";
 	}
 }

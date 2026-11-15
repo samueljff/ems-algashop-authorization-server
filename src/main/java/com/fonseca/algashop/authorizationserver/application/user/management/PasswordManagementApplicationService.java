@@ -43,6 +43,17 @@ public class PasswordManagementApplicationService {
 		AuthUser authUser = authUserRepository.findById(userId)
 				.orElseThrow(() -> new AuthUserNotFoundException(userId));
 
+		requestPassworChange(authUser);
+	}
+
+	public void requestPasswordChange(String email) {
+		AuthUser authUser = authUserRepository.findByEmail(email)
+			.orElseThrow(() -> new AuthUserNotFoundException("User not found with email: " + email));
+
+		requestPassworChange(authUser);
+    }
+
+	private void requestPassworChange(AuthUser authUser) {
 		String plainToken = authUser.generateVerificationToken(
 				userAccountProperties.getToken().getPasswordResetTtl(), tokenHasher);
 
