@@ -2,6 +2,7 @@ package com.fonseca.algashop.authorizationserver.application.user.management;
 
 import com.fonseca.algashop.authorizationserver.application.security.SecurityChecks;
 import com.fonseca.algashop.authorizationserver.application.user.UserAccountProperties;
+import com.fonseca.algashop.authorizationserver.application.user.mail.AuthUserMailSender;
 import com.fonseca.algashop.authorizationserver.application.user.query.AuthUserNotFoundException;
 import com.fonseca.algashop.authorizationserver.application.user.query.AuthUserOutput;
 import com.fonseca.algashop.authorizationserver.domain.model.user.AuthUser;
@@ -25,6 +26,7 @@ public class AuthUserManagementApplicationService {
 	private final UserAccountProperties userAccountProperties;
 	private final AuthUserPasswordManager passwordManager;
 	private final VerificationTokenHasher tokenHasher;
+	private final AuthUserMailSender authUserMailSender;
 
 	public AuthUserOutput create(AuthUserInput input) {
 
@@ -46,8 +48,7 @@ public class AuthUserManagementApplicationService {
 		String plainToken = user.generateVerificationToken(userAccountProperties.getToken().getActivationTtl(),
 			tokenHasher);
 
-		//TODO send via email
-		System.out.println("PlainToken: " + plainToken);
+		authUserMailSender.sendActivationEmail(user, plainToken);
 
 		return AuthUserOutput.from(authUserRepository.save(user));
 	}
