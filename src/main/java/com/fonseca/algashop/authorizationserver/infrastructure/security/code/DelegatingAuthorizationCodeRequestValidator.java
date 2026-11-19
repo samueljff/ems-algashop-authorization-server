@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
-import static org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationValidator.DEFAULT_REDIRECT_URI_VALIDATOR;
-import static org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationValidator.DEFAULT_SCOPE_VALIDATOR;
+import static org.springframework.security.oauth2.server.authorization.authentication
+    .OAuth2AuthorizationCodeRequestAuthenticationValidator.DEFAULT_REDIRECT_URI_VALIDATOR;
+import static org.springframework.security.oauth2.server.authorization.authentication
+    .OAuth2AuthorizationCodeRequestAuthenticationValidator.DEFAULT_SCOPE_VALIDATOR;
 
 @Component
 @RequiredArgsConstructor
@@ -17,6 +19,16 @@ public class DelegatingAuthorizationCodeRequestValidator implements Consumer<OAu
 
     @Override
     public void accept(OAuth2AuthorizationCodeRequestAuthenticationContext context) {
+
+        var authentication = context.getAuthentication();
+
+        System.out.println("Requested scopes: " + authentication.getAuthorities());
+
+        var registeredClient = context.getRegisteredClient();
+
+        System.out.println("Registered scopes: "
+            + registeredClient.getScopes());
+
         DEFAULT_REDIRECT_URI_VALIDATOR
             .andThen(DEFAULT_SCOPE_VALIDATOR)
             .andThen(clientAccessPolicyValidator)
